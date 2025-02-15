@@ -18,11 +18,11 @@ public class ClientDTO {
     private String name;
 
     @NotBlank(message = "O CPF é obrigatório.")
-    @CPF(message = "Necessário um CPF válido para realizar cadastro.")
+    @CPF(message = "Necessário um CPF válido.")
     private String cpf;
 
     @NotBlank(message = "O e-mail é obrigatório")
-    @Email(message = "Necessário um E-mail válido para realizar cadastro.")
+    @Email(message = "Necessário um E-mail válido.")
     private String email;
 
     public Client toEntity(){
