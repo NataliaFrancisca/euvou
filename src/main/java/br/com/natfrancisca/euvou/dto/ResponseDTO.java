@@ -14,28 +14,26 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDTO {
     private int httpStatus;
-    private String status;
     private String message;
     private List<?> body;
     private Client client;
 
-    public ResponseDTO(HttpStatus httpStatus, String status, String message, List<?> body, Client client){
+    public ResponseDTO(HttpStatus httpStatus, String message, List<?> body, Client client){
         this.httpStatus = httpStatus.value();
-        this.status = status;
         this.message = message;
         this.body = body;
         this.client = client;
     }
 
-    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, String status, String message){
-        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, status, message, null, null));
+    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, String message){
+        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, message, null, null));
     }
 
-    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, String status, List<?> body){
-        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, status, null, body, null));
+    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, List<?> body){
+        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, null, body, null));
     }
 
-    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, String status, Client client){
-        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, status, null, null, client));
+    public static ResponseEntity<ResponseDTO> create(HttpStatus httpStatus, Client client){
+        return ResponseEntity.status(httpStatus).body(new ResponseDTO(httpStatus, null, null, client));
     }
 }
