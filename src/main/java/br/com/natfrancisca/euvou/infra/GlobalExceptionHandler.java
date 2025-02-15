@@ -4,6 +4,7 @@ import br.com.natfrancisca.euvou.dto.ExceptionDTO;
 import br.com.natfrancisca.euvou.dto.ResponseDTO;
 import br.com.natfrancisca.euvou.exception.CPFException;
 import br.com.natfrancisca.euvou.exception.CPFInvalidException;
+import br.com.natfrancisca.euvou.exception.ClientException;
 import br.com.natfrancisca.euvou.exception.EmailException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -29,28 +30,33 @@ public class GlobalExceptionHandler {
         return ExceptionDTO.create(HttpStatus.BAD_REQUEST, "Falha", "Ocorreu um erro na requisição", errors);
     }
 
+    @ExceptionHandler(ClientException.class)
+    public ResponseEntity<ResponseDTO> handleClientException(ClientException ex){
+        return ResponseDTO.create(HttpStatus.NOT_FOUND,  ex.getMessage());
+    }
+
     @ExceptionHandler(CPFException.class)
     public ResponseEntity<ResponseDTO> handleCPFException(CPFException ex){
-        return ResponseDTO.create(HttpStatus.BAD_REQUEST, "Falha", ex.getMessage());
+        return ResponseDTO.create(HttpStatus.BAD_REQUEST,  ex.getMessage());
     }
 
     @ExceptionHandler(CPFInvalidException.class)
     public ResponseEntity<ResponseDTO> handleCPFException(CPFInvalidException ex){
-        return ResponseDTO.create(HttpStatus.BAD_REQUEST, "Falha", ex.getMessage());
+        return ResponseDTO.create(HttpStatus.BAD_REQUEST,  ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDTO> handleIllegalArgumentException(IllegalArgumentException ex){
-        return ResponseDTO.create(HttpStatus.BAD_REQUEST, "Falha", ex.getMessage());
+        return ResponseDTO.create(HttpStatus.BAD_REQUEST,  ex.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ResponseDTO> handleDatInegrityViolationException(DataIntegrityViolationException ex){
-        return ResponseDTO.create(HttpStatus.CONFLICT, "Erro", "Já existe um cadastro com esse número de CPF.");
+        return ResponseDTO.create(HttpStatus.CONFLICT,  "Já existe um cadastro com esse número de CPF.");
     }
 
     @ExceptionHandler(EmailException.class)
     public ResponseEntity<ResponseDTO> handleEmailException(EmailException ex){
-        return ResponseDTO.create(HttpStatus.CONFLICT, "Erro", "Já existe um cadastro com esse endereço de email.");
+        return ResponseDTO.create(HttpStatus.CONFLICT,  "Já existe um cadastro com esse endereço de email.");
     }
 }
