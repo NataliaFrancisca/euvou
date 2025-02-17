@@ -1,7 +1,6 @@
 package br.com.natfrancisca.euvou.service;
 
 import br.com.natfrancisca.euvou.exception.CPFException;
-import br.com.natfrancisca.euvou.exception.CPFInvalidException;
 import br.com.natfrancisca.euvou.exception.ClientException;
 import br.com.natfrancisca.euvou.exception.EmailException;
 import br.com.natfrancisca.euvou.model.Client;
@@ -25,13 +24,13 @@ public class ClientService {
         boolean cpfValidation = new CPFValidation().isValid(cpf);
 
         if(!cpfValidation){
-            throw new CPFInvalidException();
+            throw new CPFException("Digite um CPF válido ex.: xxx.xxx.xxx-xx");
         }
     }
 
     private void isCPFAlreadyUsed(String cpf){
         if(clientRepository.existsByCpf(cpf)){
-            throw new CPFException();
+            throw new CPFException("Já existe um cliente com esse número de CPF.");
         }
     }
 
@@ -39,7 +38,7 @@ public class ClientService {
         isCPFAlreadyUsed(client.getCpf());
 
         if(clientRepository.existsByEmail(client.getEmail())){
-            throw new EmailException();
+            throw new EmailException("Já existe um cliente com esse endereço de Email.");
         }
 
         return this.clientRepository.save(client);
