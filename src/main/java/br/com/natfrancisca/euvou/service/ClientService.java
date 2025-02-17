@@ -59,7 +59,7 @@ public class ClientService {
         validationCPF(cpf);
 
         if(!this.clientRepository.existsByCpf(cpf)){
-            throw new ClientException();
+            throw new ClientException("Não existe cliente com esse CPF.");
         }
 
         Client clientToUpdate = this.clientRepository.findByCpf(cpf);
@@ -75,7 +75,7 @@ public class ClientService {
         validationCPF(cpf);
 
         if(!this.clientRepository.existsByCpf(cpf)){
-            throw new ClientException();
+            throw new ClientException("Não existe cliente com esse CPF.");
         }
 
         this.clientRepository.deleteByCpf(cpf);
