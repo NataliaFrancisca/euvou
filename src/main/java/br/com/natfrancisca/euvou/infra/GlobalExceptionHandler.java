@@ -6,6 +6,7 @@ import br.com.natfrancisca.euvou.exception.CPFException;
 import br.com.natfrancisca.euvou.exception.CPFInvalidException;
 import br.com.natfrancisca.euvou.exception.ClientException;
 import br.com.natfrancisca.euvou.exception.EmailException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,5 +59,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailException.class)
     public ResponseEntity<ResponseDTO> handleEmailException(EmailException ex){
         return ResponseDTO.create(HttpStatus.CONFLICT,  "Já existe um cadastro com esse endereço de email.");
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ResponseDTO> handleEntityNotFoundException(EntityNotFoundException ex){
+        return ResponseDTO.create(HttpStatus.NOT_FOUND, "Não foi retornar o dado requisitado.");
     }
 }
