@@ -1,6 +1,6 @@
 package br.com.natfrancisca.euvou.controller;
 
-import br.com.natfrancisca.euvou.dto.ResponseDTO;
+import br.com.natfrancisca.euvou.dto.APIResponseDTO;
 import br.com.natfrancisca.euvou.model.Organizer;
 import br.com.natfrancisca.euvou.service.OrganizerService;
 import jakarta.validation.Valid;
@@ -20,14 +20,14 @@ public class OrganizerController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> create(@Valid @RequestBody br.com.natfrancisca.euvou.dto.OrganizerDTO organizerDTO){
+    public ResponseEntity<APIResponseDTO> create(@Valid @RequestBody br.com.natfrancisca.euvou.dto.OrganizerDTO organizerDTO){
         Organizer responsible = organizerDTO.toEntity();
         this.organizerService.create(responsible);
-        return ResponseDTO.create(HttpStatus.CREATED, "Organizador criado com sucesso.");
+        return APIResponseDTO.create(HttpStatus.CREATED, "Organizador criado com sucesso.");
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO> get(){
-        return ResponseDTO.create(HttpStatus.OK, this.organizerService.getAll());
+    public ResponseEntity<APIResponseDTO> get(){
+        return APIResponseDTO.create(HttpStatus.OK, this.organizerService.getAll());
     }
 }
