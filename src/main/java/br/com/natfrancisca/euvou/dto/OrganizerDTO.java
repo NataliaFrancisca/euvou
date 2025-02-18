@@ -25,12 +25,13 @@ public class OrganizerDTO {
     private String email;
 
    public Organizer toEntity(){
-       Organizer responsible = new Organizer();
+       Organizer organizer = new Organizer();
 
-       responsible.setName(this.name);
-       responsible.setCnpj(this.cnpj);
-       responsible.setEmail(this.email);
+       organizer.setId(this.id);
+       organizer.setName(this.name);
+       organizer.setCnpj(this.cnpj);
+       organizer.setEmail(this.email);
 
-       return responsible;
+       return organizer;
    }
 }
