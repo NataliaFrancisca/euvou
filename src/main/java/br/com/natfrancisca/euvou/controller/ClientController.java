@@ -1,7 +1,7 @@
 package br.com.natfrancisca.euvou.controller;
 
 import br.com.natfrancisca.euvou.dto.ClientDTO;
-import br.com.natfrancisca.euvou.dto.ResponseDTO;
+import br.com.natfrancisca.euvou.dto.APIResponseDTO;
 import br.com.natfrancisca.euvou.model.Client;
 import br.com.natfrancisca.euvou.service.ClientService;
 import jakarta.transaction.Transactional;
@@ -25,35 +25,35 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> create(@Valid @RequestBody ClientDTO clientDTO){
+    public ResponseEntity<APIResponseDTO> create(@Valid @RequestBody ClientDTO clientDTO){
         Client client = clientDTO.toEntity();
         this.clientService.create(client);
-        return ResponseDTO.create(HttpStatus.CREATED, "Cliente cadastrado com sucesso.");
+        return APIResponseDTO.create(HttpStatus.CREATED, "Cliente cadastrado com sucesso.");
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    public ResponseEntity<APIResponseDTO> getAll(){
         List<Client> clients = this.clientService.get();
         System.out.println(clients);
-        return ResponseDTO.create(HttpStatus.OK, clients);
+        return APIResponseDTO.create(HttpStatus.OK, clients);
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<ResponseDTO> getByCPF(@Valid @PathVariable String cpf){
+    public ResponseEntity<APIResponseDTO> getByCPF(@Valid @PathVariable String cpf){
         Client client = clientService.getClient(cpf);
-        return ResponseDTO.create(HttpStatus.OK, client);
+        return APIResponseDTO.create(HttpStatus.OK, client);
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<ResponseDTO> update(@PathVariable String cpf, @Valid @RequestBody ClientDTO clientDTO){
+    public ResponseEntity<APIResponseDTO> update(@PathVariable String cpf, @Valid @RequestBody ClientDTO clientDTO){
         Client client = this.clientService.update(cpf, clientDTO.toEntity());
-        return ResponseDTO.create(HttpStatus.OK, client);
+        return APIResponseDTO.create(HttpStatus.OK, client);
     }
 
     @DeleteMapping("/{cpf}")
     @Transactional
-    public ResponseEntity<ResponseDTO> delete(@PathVariable String cpf){
+    public ResponseEntity<APIResponseDTO> delete(@PathVariable String cpf){
         this.clientService.delete(cpf);
-        return ResponseDTO.create(HttpStatus.OK, "Cliente deletado com sucesso.");
+        return APIResponseDTO.create(HttpStatus.OK, "Cliente deletado com sucesso.");
     }
 }
