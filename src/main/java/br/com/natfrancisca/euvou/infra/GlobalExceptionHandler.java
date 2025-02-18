@@ -4,13 +4,16 @@ import br.com.natfrancisca.euvou.dto.APIResponseDTO;
 import br.com.natfrancisca.euvou.exception.CPFException;
 import br.com.natfrancisca.euvou.exception.ClientException;
 import br.com.natfrancisca.euvou.exception.EmailException;
+import br.com.natfrancisca.euvou.exception.OrganizerException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,17 @@ public class GlobalExceptionHandler {
         });
 
         return APIResponseDTO.create(HttpStatus.BAD_REQUEST, "Ocorreu um erro na requisição", errors);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<APIResponseDTO> handleConstraintViolationException(ConstraintViolationException ex){
+        Map<String, String> errorMessages = new HashMap<>();
+
+        ex.getConstraintViolations().forEach(violation -> {
+            errorMessages.put(violation.getPropertyPath().toString(), violation.getMessage());
+        });
+
+        return APIResponseDTO.create(HttpStatus.BAD_REQUEST, "Ocorreu um erro na requisição", errorMessages);
     }
 
     @ExceptionHandler(ClientException.class)
