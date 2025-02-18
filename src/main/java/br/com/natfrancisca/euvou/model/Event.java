@@ -1,6 +1,7 @@
 package br.com.natfrancisca.euvou.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,12 +21,16 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
+    @Valid
     @Embedded
+    @Column(nullable = false)
     private Address address;
 
     @Column(nullable = false)
+    @Valid
     private LocalDateTime date;
 
+    @Column(nullable = false)
     private Long organizer_id;
 
     @ManyToOne
@@ -33,6 +38,7 @@ public class Event {
     private Organizer organizer;
 
     public Event(Event event, Organizer organizer){
+        this.id = event.getId();
         this.name = event.getName();
         this.address = event.getAddress();
         this.date = event.getDate();
