@@ -4,12 +4,17 @@
 
 ## O que essa API permite:
 
-### Cliente:
+### Cliente (`/client`):
 - [X] Criar Cliente
 - [X] Acessar Cliente usando seu ``id`` ou ``CPF``
 - [X] Listar Clientes
 - [X] Editar Cliente
 - [X] Deletar Cliente
 
+### Organizador (`/organizer`)
+- [X] Criar Organizador
+- [X] Listar Organizadores
 
-
+### Evento (`/event`)
+- [X] Criar Evento
+- [X] Listar Eventos
