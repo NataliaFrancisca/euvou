@@ -1,11 +1,7 @@
 package br.com.natfrancisca.euvou.service;
 
-import br.com.natfrancisca.euvou.converter.EventConverter;
 import br.com.natfrancisca.euvou.dto.EventDTO;
-import br.com.natfrancisca.euvou.dto.OrganizerDTO;
-import br.com.natfrancisca.euvou.dto.OrganizerShortDTO;
-import br.com.natfrancisca.euvou.exception.ClientException;
-import br.com.natfrancisca.euvou.model.Client;
+import br.com.natfrancisca.euvou.exception.OrganizerException;
 import br.com.natfrancisca.euvou.model.Event;
 import br.com.natfrancisca.euvou.model.Organizer;
 import br.com.natfrancisca.euvou.repository.EventRepository;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 
 @Service
 public class EventService {
@@ -30,13 +25,13 @@ public class EventService {
 
     public Event create(EventDTO eventDTO){
         if(eventDTO.getOrganizer_id() == null){
-            throw new IllegalArgumentException("O cliente não pode ser nulo.");
+            throw new OrganizerException("O organizador do evento não pode ser nulo.");
         }
 
         Optional<Organizer> organizerOptional = this.organizerRepository.findById(eventDTO.getOrganizer_id());
 
         if(organizerOptional.isEmpty()){
-            throw new ClientException("Não existe cliente com esse ID.");
+            throw new OrganizerException("Não existe nenhum organizador com esse ID.");
         }
 
         Event event = eventDTO.toEntity();
@@ -44,8 +39,10 @@ public class EventService {
     }
 
     public List<EventDTO> list(){
-        List<EventDTO> events = this.eventRepository.findAll().stream().map(EventConverter::convertToSummary).toList();
-        return events;
+        return this.eventRepository.findAll()
+                .stream()
+                .map(EventDTO::fromEntity)
+                .toList();
     }
 
 }
