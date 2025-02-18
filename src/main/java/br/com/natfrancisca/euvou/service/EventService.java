@@ -23,18 +23,17 @@ public class EventService {
         this.organizerRepository = organizerRepository;
     }
 
-    public Event create(EventDTO eventDTO){
-        if(eventDTO.getOrganizer_id() == null){
+    public Event create(Event event){
+        if(event.getOrganizer_id() == null){
             throw new OrganizerException("O organizador do evento não pode ser nulo.");
         }
 
-        Optional<Organizer> organizerOptional = this.organizerRepository.findById(eventDTO.getOrganizer_id());
+        Optional<Organizer> organizerOptional = this.organizerRepository.findById(event.getOrganizer_id());
 
         if(organizerOptional.isEmpty()){
             throw new OrganizerException("Não existe nenhum organizador com esse ID.");
         }
 
-        Event event = eventDTO.toEntity();
         return this.eventRepository.save(event);
     }
 
