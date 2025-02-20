@@ -16,31 +16,25 @@ import java.util.Map;
 public class APIResponseDTO {
     private int httpStatus;
     private String message;
-    private List<?> body;
-    private Client client;
+    private Object body;
     private Map<String, String> errors;
 
-    public APIResponseDTO(HttpStatus httpStatus, String message, List<?> body, Client client, Map<String, String> errors){
+    public APIResponseDTO(HttpStatus httpStatus, String message, Object body, Map<String, String> errors){
         this.httpStatus = httpStatus.value();
         this.message = message;
         this.body = body;
-        this.client = client;
         this.errors = errors;
     }
 
     public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, String message){
-        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, null, null, null));
+        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, null, null));
     }
 
-    public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, List<?> body){
-        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, null, body, null, null));
-    }
-
-    public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, Client client){
-        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, null, null, client, null));
+    public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, Object body){
+        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, null, body, null));
     }
 
     public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, String message, Map<String, String> errors){
-        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, null, null, errors));
+        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, null, errors));
     }
 }
