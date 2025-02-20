@@ -1,10 +1,7 @@
 package br.com.natfrancisca.euvou.infra;
 
 import br.com.natfrancisca.euvou.dto.APIResponseDTO;
-import br.com.natfrancisca.euvou.exception.CPFException;
-import br.com.natfrancisca.euvou.exception.ClientException;
-import br.com.natfrancisca.euvou.exception.EmailException;
-import br.com.natfrancisca.euvou.exception.OrganizerException;
+import br.com.natfrancisca.euvou.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,5 +67,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<APIResponseDTO> handleEntityNotFoundException(EntityNotFoundException ex){
         return APIResponseDTO.create(HttpStatus.NOT_FOUND, "Não foi retornar o dado requisitado.");
+    }
+
+    @ExceptionHandler(OrganizerException.class)
+    public ResponseEntity<APIResponseDTO> handleOrganizerException(OrganizerException ex){
+        return APIResponseDTO.create(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }

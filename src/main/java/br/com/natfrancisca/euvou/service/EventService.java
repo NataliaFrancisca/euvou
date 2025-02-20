@@ -44,4 +44,54 @@ public class EventService {
                 .toList();
     }
 
+    public EventDTO get(Long id){
+        Optional<Event> eventOptional = this.eventRepository.findById(id);
+
+        return eventOptional.map(EventDTO::fromEntity)
+                .orElseThrow(() -> new OrganizerException("Nenhum evento encontrado com esse ID."));
+    }
+
+    public List<EventDTO> getByName(String title){
+        List<Event> events = this.eventRepository.findByNameContainingIgnoreCase(title);
+
+        if(events.isEmpty()){
+            throw new OrganizerException("Nenhum evento com esse nome.");
+        }
+
+        return events.stream().map(EventDTO::fromEntity).toList();
+    }
+
+    public void delete(Long id){
+        Optional<Event> optionalEvent = this.eventRepository.findById(id);
+
+        if(optionalEvent.isEmpty()){
+            throw new OrganizerException("Nenhum evento encontrado com esse ID.");
+        }
+
+        this.eventRepository.delete(optionalEvent.get());
+    }
+
+    public Event update(Long id, Event event){
+        Optional<Event> optionalEvent = this.eventRepository.findById(id);
+
+        if(optionalEvent.isEmpty()){
+            throw new OrganizerException("Nenhum evento encontrado com esse ID.");
+        }
+
+        Optional<Organizer> organizerOptional = this.organizerRepository.findById(event.getOrganizer_id());
+
+        if(organizerOptional.isEmpty()){
+            throw new OrganizerException("Não existe nenhum organizador com esse ID.");
+        }
+
+        Event eventToUpdate = optionalEvent.get();
+
+        eventToUpdate.setName(event.getName());
+        eventToUpdate.setAddress(event.getAddress());
+        eventToUpdate.setOrganizer_id(event.getOrganizer_id());
+        eventToUpdate.setOrganizer(organizerOptional.get());
+
+        return this.eventRepository.save(eventToUpdate);
+    }
+
 }
