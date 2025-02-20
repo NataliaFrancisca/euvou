@@ -44,14 +44,14 @@ public class EventService {
                 .toList();
     }
 
-    public EventDTO getEvent(Long id){
+    public EventDTO get(Long id){
         Optional<Event> eventOptional = this.eventRepository.findById(id);
 
         return eventOptional.map(EventDTO::fromEntity)
                 .orElseThrow(() -> new OrganizerException("Nenhum evento encontrado com esse ID."));
     }
 
-    public List<EventDTO> getEventByName(String title){
+    public List<EventDTO> getByName(String title){
         List<Event> events = this.eventRepository.findByNameContainingIgnoreCase(title);
 
         if(events.isEmpty()){
@@ -61,7 +61,7 @@ public class EventService {
         return events.stream().map(EventDTO::fromEntity).toList();
     }
 
-    public void deleteEvent(Long id){
+    public void delete(Long id){
         Optional<Event> optionalEvent = this.eventRepository.findById(id);
 
         if(optionalEvent.isEmpty()){
@@ -71,7 +71,7 @@ public class EventService {
         this.eventRepository.delete(optionalEvent.get());
     }
 
-    public Event updateEvent(Long id, Event event){
+    public Event update(Long id, Event event){
         Optional<Event> optionalEvent = this.eventRepository.findById(id);
 
         if(optionalEvent.isEmpty()){
