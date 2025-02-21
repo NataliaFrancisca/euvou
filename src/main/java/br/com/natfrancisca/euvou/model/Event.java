@@ -30,7 +30,7 @@ public class Event {
     @Valid
     private LocalDateTime date;
 
-    @Column(nullable = false)
+    @Column()
     private Long organizer_id;
 
     @ManyToOne
