@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +17,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<APIResponseDTO> handleJsonParseError(HttpMessageNotReadableException ex){
+        System.out.println(ex);
+        return APIResponseDTO.create(HttpStatus.BAD_REQUEST, "O JSON enviado não está correto, verifique os campos antes de enviar uma nova requisição.");
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<APIResponseDTO> handleValidationException(MethodArgumentNotValidException ex){
