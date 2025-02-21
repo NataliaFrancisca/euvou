@@ -15,6 +15,9 @@
 ### Organizador (`/organizer`)
 - [X] Criar Organizador
 - [X] Listar Organizadores
+- [X] Buscar por Organizador (`id`)
+- [X] Editar Organizador
+- [X] Deletar Organizador   
 
 ### Evento (`/event`)
 - [X] Criar Evento
