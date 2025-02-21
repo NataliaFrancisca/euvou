@@ -30,6 +30,10 @@ public class APIResponseDTO {
         return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, null, null));
     }
 
+    public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, String message, Object body){
+        return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, message, body, null));
+    }
+
     public static ResponseEntity<APIResponseDTO> create(HttpStatus httpStatus, Object body){
         return ResponseEntity.status(httpStatus).body(new APIResponseDTO(httpStatus, null, body, null));
     }
