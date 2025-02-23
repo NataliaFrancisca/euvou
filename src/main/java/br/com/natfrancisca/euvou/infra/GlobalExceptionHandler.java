@@ -80,4 +80,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponseDTO> handleOrganizerException(OrganizerException ex){
         return APIResponseDTO.create(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler(TicketException.class)
+    public ResponseEntity<APIResponseDTO> handleTicketException(TicketException ex){
+        return APIResponseDTO.create(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }
