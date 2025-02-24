@@ -37,7 +37,7 @@ public class OrganizerController {
     }
 
     @PutMapping("/{cnpj}")
-    public ResponseEntity<APIResponseDTO> update(@PathVariable String cnpj, @RequestBody OrganizerDTO organizerDTO){
+    public ResponseEntity<APIResponseDTO> update(@PathVariable String cnpj, @Valid @RequestBody OrganizerDTO organizerDTO){
         return APIResponseDTO.create(HttpStatus.OK, this.organizerService.update(cnpj, organizerDTO.toEntity()));
     }
 
