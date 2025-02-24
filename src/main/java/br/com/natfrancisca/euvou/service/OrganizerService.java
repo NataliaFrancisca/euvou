@@ -37,8 +37,6 @@ public class OrganizerService {
     }
 
     public Organizer create(Organizer organizer){
-        this.validatorCNPJ.validate(organizer.getCnpj());
-
         if(this.organizerRepository.existsByCnpj(organizer.getCnpj())){
             throw new DataIntegrityViolationException("Já existe uma organização registrada com esse CNPJ.");
         }
@@ -70,8 +68,6 @@ public class OrganizerService {
 
         Organizer organizerToUpdate = this.getOrganizerOrCheckOrganizerExist(cnpjFormatted);
 
-        this.validatorCNPJ.validate(organizer.getCnpj());
-
         organizerToUpdate.setName(organizer.getName());
         organizerToUpdate.setEmail(organizer.getEmail());
         organizerToUpdate.setCnpj(organizer.getCnpj());
@@ -81,7 +77,6 @@ public class OrganizerService {
 
     public void delete(String cnpj){
         String cnpjFormatted = convertStringToCNPJ(cnpj);
-        this.validatorCNPJ.validate(cnpjFormatted);
         this.getOrganizerOrCheckOrganizerExist(cnpjFormatted);
 
         this.organizerRepository.deleteByCnpj(cnpjFormatted);
