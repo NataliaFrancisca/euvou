@@ -1,7 +1,5 @@
 package br.com.natfrancisca.euvou.dto;
 
-import br.com.natfrancisca.euvou.model.Event;
-import br.com.natfrancisca.euvou.model.Organizer;
 import br.com.natfrancisca.euvou.model.Tickets;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +17,7 @@ public class TicketsDTO {
     private int amount;
     private LocalDateTime dataAccessTickets;
     private int numberDaysCloseAccessTickets;
+    private boolean accessStatus;
     private EventDTO event;
 
     public static TicketsDTO fromEntity(Tickets tickets){
@@ -27,6 +26,7 @@ public class TicketsDTO {
                 tickets.getAmount(),
                 tickets.getDateAccessTickets(),
                 tickets.getNumberDaysCloseAccessTickets(),
+                tickets.isAccessStatus(),
                 EventDTO.fromEntity(tickets.getEvent())
         );
     }
