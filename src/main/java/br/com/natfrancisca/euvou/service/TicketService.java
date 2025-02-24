@@ -5,7 +5,7 @@ import br.com.natfrancisca.euvou.model.Ticket;
 import br.com.natfrancisca.euvou.model.Tickets;
 import br.com.natfrancisca.euvou.repository.TicketRepository;
 import br.com.natfrancisca.euvou.repository.TicketsRepository;
-import br.com.natfrancisca.euvou.util.TicketValidator;
+import br.com.natfrancisca.euvou.util.ValidatorTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ import java.util.Optional;
 public class TicketService {
     final private TicketRepository ticketRepository;
     final private TicketsRepository ticketsRepository;
-    final private TicketValidator ticketValidator;
+    final private ValidatorTicket ticketValidator;
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository, TicketsRepository ticketsRepository, TicketValidator ticketValidator){
+    public TicketService(TicketRepository ticketRepository, TicketsRepository ticketsRepository, ValidatorTicket ticketValidator){
         this.ticketRepository = ticketRepository;
         this.ticketsRepository = ticketsRepository;
         this.ticketValidator = ticketValidator;

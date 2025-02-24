@@ -1,6 +1,5 @@
 package br.com.natfrancisca.euvou.util;
 
-import br.com.natfrancisca.euvou.exception.ClientException;
 import br.com.natfrancisca.euvou.exception.EventException;
 import br.com.natfrancisca.euvou.exception.TicketException;
 import br.com.natfrancisca.euvou.model.Ticket;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class TicketValidator {
+public class ValidatorTicket {
     final private TicketRepository ticketRepository;
     final private TicketsRepository ticketsRepository;
 
     @Autowired
-    public TicketValidator(TicketRepository ticketRepository, TicketsRepository ticketsRepository){
+    public ValidatorTicket(TicketRepository ticketRepository, TicketsRepository ticketsRepository){
         this.ticketRepository = ticketRepository;
         this.ticketsRepository = ticketsRepository;
     }
@@ -33,7 +32,7 @@ public class TicketValidator {
         }
 
         if(this.ticketRepository.existsByClientId(ticket.getClient_id())){
-            throw new ClientException("Cliente já adquiriu ingresso para esse evento.");
+            throw new IllegalStateException("Cliente já adquiriu ingresso para esse evento.");
         }
 
         if(LocalDateTime.now().isBefore(tickets.getDateAccessTickets())){

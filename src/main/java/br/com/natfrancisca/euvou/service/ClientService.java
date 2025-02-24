@@ -1,45 +1,46 @@
 package br.com.natfrancisca.euvou.service;
 
-import br.com.natfrancisca.euvou.exception.InvalidCPFException;
-import br.com.natfrancisca.euvou.exception.EmailException;
 import br.com.natfrancisca.euvou.model.Client;
 import br.com.natfrancisca.euvou.repository.ClientRepository;
-import br.com.natfrancisca.euvou.util.CPFValidation;
+import br.com.natfrancisca.euvou.util.ValidatorCPF;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
     final private ClientRepository clientRepository;
+    final private ValidatorCPF validatorCPF;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository){
+    public ClientService(ClientRepository clientRepository, ValidatorCPF validatorCPF){
         this.clientRepository = clientRepository;
+        this.validatorCPF = validatorCPF;
     }
 
-    private void validationCPF(String cpf){
-        boolean cpfValidation = new CPFValidation().isValid(cpf);
+    private Client getClientOrCheckClientExist(String cpf){
+        Optional<Client> clientOptional = this.clientRepository.findByCpf(cpf);
 
-        if(!cpfValidation){
-            throw new InvalidCPFException("Digite um CPF válido ex.: xxx.xxx.xxx-xx");
+        if(clientOptional.isEmpty()){
+            throw new EntityNotFoundException("Não existe registro de cliente com esse CPF.");
         }
-    }
 
-    private void isCPFAlreadyUsed(String cpf){
-        if(clientRepository.existsByCpf(cpf)){
-            throw new DataIntegrityViolationException("Já existe um cliente com esse número de CPF.");
-        }
+        return clientOptional.get();
     }
 
     public Client create(Client client){
-        isCPFAlreadyUsed(client.getCpf());
+        this.validatorCPF.validate(client.getCpf());
 
-        if(clientRepository.existsByEmail(client.getEmail())){
-            throw new EmailException("Já existe um cliente com esse endereço de Email.");
+        if(clientRepository.existsByCpf(client.getCpf())){
+            throw new DataIntegrityViolationException("Já existe um cliente com esse número de CPF.");
+        }
+
+        if(this.clientRepository.existsByEmail(client.getEmail())){
+            throw new DataIntegrityViolationException("Já existe um cliente com esse endereço de E-mail.");
         }
 
         return this.clientRepository.save(client);
@@ -49,38 +50,30 @@ public class ClientService {
         return this.clientRepository.findAll();
     }
 
-    public Client getClient(String cpf){
-        validationCPF(cpf);
-
-        if(!this.clientRepository.existsByCpf(cpf)){
-            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
-        }
-
-        return this.clientRepository.findByCpf(cpf);
+    public Client getByCPF(String cpf){
+        this.validatorCPF.validate(cpf);
+        return this.getClientOrCheckClientExist(cpf);
     }
 
     public Client update(String cpf, Client client){
-        validationCPF(cpf);
+        this.validatorCPF.validate(cpf);
 
-        if(!this.clientRepository.existsByCpf(cpf)){
-            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
+        if(clientRepository.existsByCpf(client.getCpf())){
+            throw new DataIntegrityViolationException("Já existe um cliente com esse número de CPF.");
         }
 
-        Client clientToUpdate = this.clientRepository.findByCpf(cpf);
+        Client clientToUpdate = this.getClientOrCheckClientExist(cpf);
 
-        clientToUpdate.setEmail(client.getEmail());
         clientToUpdate.setName(client.getName());
+        clientToUpdate.setEmail(client.getEmail());
         clientToUpdate.setCpf(client.getCpf());
 
         return this.clientRepository.save(clientToUpdate);
     }
 
     public void delete(String cpf){
-        validationCPF(cpf);
-
-        if(!this.clientRepository.existsByCpf(cpf)){
-            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
-        }
+        this.validatorCPF.validate(cpf);
+        this.getClientOrCheckClientExist(cpf);
 
         this.clientRepository.deleteByCpf(cpf);
     }
