@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/tickets")
 public class TicketsController {
-    private TicketsService ticketsService;
+    private final TicketsService ticketsService;
 
     @Autowired
     public TicketsController(TicketsService ticketsService){
@@ -28,5 +28,16 @@ public class TicketsController {
     @GetMapping
     public ResponseEntity<APIResponseDTO> get(){
         return APIResponseDTO.create(HttpStatus.OK, this.ticketsService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<APIResponseDTO> getByID(@PathVariable Long id){
+        return APIResponseDTO.create(HttpStatus.OK, this.ticketsService.getById(id));
+    }
+
+    @PutMapping("/{id}/manage-access")
+    public ResponseEntity<APIResponseDTO> manageTicketAccess(@PathVariable Long id, @RequestParam boolean access){
+        this.ticketsService.updateTicketAccess(id, access);
+        return APIResponseDTO.create(HttpStatus.CREATED, access ? "Acesso aos ingressos liberado com sucesso." : "Acesso aos ingressos bloqueado com sucesso.");
     }
 }
