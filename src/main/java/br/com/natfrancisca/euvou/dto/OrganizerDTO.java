@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 @Getter
 @Setter
@@ -17,7 +18,8 @@ public class OrganizerDTO {
     @NotBlank(message = "O nome é obrigatório")
     private String name;
 
-    @NotBlank(message = "O CPNJ é obrigatório.")
+    @NotBlank(message = "O CNPJ é obrigatório.")
+    @CNPJ(message = "Necessário um CNPJ válido.")
     private String cnpj;
 
     @NotBlank(message = "O e-mail é obrigatório")
