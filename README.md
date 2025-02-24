@@ -7,7 +7,6 @@
 ### Cliente (`/client`):
 - [X] Criar Cliente
 - [X] Listar Clientes
-- [X] Busca por Cliente (`id`)
 - [X] Busca por Cliente (`cpf`) 
 - [X] Editar Cliente
 - [X] Deletar Cliente
@@ -26,3 +25,5 @@
 - [X] Buscar por Evento (`id`)
 - [X] Editar Eventos
 - [X] Deletar Evento
+
+      
