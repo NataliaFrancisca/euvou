@@ -1,12 +1,13 @@
 package br.com.natfrancisca.euvou.service;
 
-import br.com.natfrancisca.euvou.exception.CPFException;
-import br.com.natfrancisca.euvou.exception.ClientException;
+import br.com.natfrancisca.euvou.exception.InvalidCPFException;
 import br.com.natfrancisca.euvou.exception.EmailException;
 import br.com.natfrancisca.euvou.model.Client;
 import br.com.natfrancisca.euvou.repository.ClientRepository;
 import br.com.natfrancisca.euvou.util.CPFValidation;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +25,13 @@ public class ClientService {
         boolean cpfValidation = new CPFValidation().isValid(cpf);
 
         if(!cpfValidation){
-            throw new CPFException("Digite um CPF válido ex.: xxx.xxx.xxx-xx");
+            throw new InvalidCPFException("Digite um CPF válido ex.: xxx.xxx.xxx-xx");
         }
     }
 
     private void isCPFAlreadyUsed(String cpf){
         if(clientRepository.existsByCpf(cpf)){
-            throw new CPFException("Já existe um cliente com esse número de CPF.");
+            throw new DataIntegrityViolationException("Já existe um cliente com esse número de CPF.");
         }
     }
 
@@ -50,7 +51,11 @@ public class ClientService {
 
     public Client getClient(String cpf){
         validationCPF(cpf);
-        isCPFAlreadyUsed(cpf);
+
+        if(!this.clientRepository.existsByCpf(cpf)){
+            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
+        }
+
         return this.clientRepository.findByCpf(cpf);
     }
 
@@ -58,7 +63,7 @@ public class ClientService {
         validationCPF(cpf);
 
         if(!this.clientRepository.existsByCpf(cpf)){
-            throw new ClientException("Não existe cliente com esse CPF.");
+            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
         }
 
         Client clientToUpdate = this.clientRepository.findByCpf(cpf);
@@ -74,7 +79,7 @@ public class ClientService {
         validationCPF(cpf);
 
         if(!this.clientRepository.existsByCpf(cpf)){
-            throw new ClientException("Não existe cliente com esse CPF.");
+            throw new EntityNotFoundException("Não existe cliente com esse CPF.");
         }
 
         this.clientRepository.deleteByCpf(cpf);
