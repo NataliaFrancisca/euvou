@@ -46,7 +46,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            ClientException.class,
             InvalidCPFException.class,
             OrganizerException.class,
             TicketException.class,
