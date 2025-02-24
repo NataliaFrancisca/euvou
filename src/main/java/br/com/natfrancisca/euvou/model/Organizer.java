@@ -2,6 +2,7 @@ package br.com.natfrancisca.euvou.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 @Entity(name = "organizer")
 @Table(name = "organizer")
@@ -21,8 +22,6 @@ public class Organizer{
     private String email;
 
     @Column(nullable = false, unique = true)
+    @CNPJ
     private String cnpj;
-
-    public Organizer(Long id) {
-    }
 }
