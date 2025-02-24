@@ -58,6 +58,10 @@ public class ClientService {
     public Client update(String cpf, Client client){
         this.validatorCPF.validate(cpf);
 
+        if(clientRepository.existsByCpf(client.getCpf())){
+            throw new DataIntegrityViolationException("Já existe um cliente com esse número de CPF.");
+        }
+
         Client clientToUpdate = this.getClientOrCheckClientExist(cpf);
 
         clientToUpdate.setName(client.getName());
