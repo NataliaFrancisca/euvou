@@ -39,9 +39,8 @@ public class Tickets {
     @JoinColumn(name = "event_id", insertable = false, updatable = false)
     private Event event;
 
-//    @OneToMany(mappedBy = "tickets")
-//    @JsonManagedReference
-//    private List<Ticket> tickets;
+    @Column(nullable = false)
+    private boolean accessStatus = true;
 
     public Tickets(Tickets tickets, Event event){
         this.amount = tickets.getAmount();
