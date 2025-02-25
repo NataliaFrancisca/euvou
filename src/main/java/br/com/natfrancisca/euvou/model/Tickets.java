@@ -1,15 +1,14 @@
 package br.com.natfrancisca.euvou.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity(name = "Tickets")
 @Table(name = "Tickets")
@@ -23,6 +22,7 @@ public class Tickets {
     private Long id;
 
     @Column(nullable = false)
+    @Min(2)
     private int amount;
 
     @Column(nullable = false)
@@ -30,6 +30,7 @@ public class Tickets {
     private LocalDateTime dateAccessTickets;
 
     @Column(nullable = false)
+    @Min(1)
     private int numberDaysCloseAccessTickets;
 
     @Column(nullable = false)
