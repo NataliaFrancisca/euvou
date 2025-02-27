@@ -11,6 +11,6 @@ public interface TicketsRepository extends JpaRepository<Tickets, Long> {
     boolean existsByEventId(Long id);
     Optional<Tickets> findByEventId(Long id);
 
-    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.event.id = :eventId")
+    @Query("SELECT COUNT(t) FROM Tickets t WHERE t.event.id = :eventId")
     Long countTicketsByEvent(@Param("eventId") Long eventId);
 }
