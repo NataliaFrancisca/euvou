@@ -47,9 +47,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             InvalidCPFException.class,
-            OrganizerException.class,
-            TicketException.class,
-            TicketsException.class,
             IllegalArgumentException.class
     })
     public ResponseEntity<APIResponseDTO> handleBadRequestExceptions(Exception ex){
@@ -67,5 +64,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<APIResponseDTO> handleEntityNotFoundException(EntityNotFoundException ex){
         return APIResponseDTO.create(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<APIResponseDTO> handleIllegalStateException(IllegalStateException ex){
+        return APIResponseDTO.create(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }
