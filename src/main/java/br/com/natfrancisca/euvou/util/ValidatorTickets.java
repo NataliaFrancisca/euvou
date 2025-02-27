@@ -43,4 +43,21 @@ public class ValidatorTickets {
 
         return eventOptional.get();
     }
+
+    public void validateUpdateTickets(Tickets tickets, Tickets ticketsToUpdate){
+
+        if(!tickets.getEvent_id().equals(ticketsToUpdate.getEvent_id()) && this.ticketsRepository.existsByEventId(tickets.getEvent_id())) {
+            throw new DataIntegrityViolationException("Já existe ingressos para esse evento.");
+        }
+
+        Optional<Event> eventOptional = this.eventRepository.findById(tickets.getEvent_id());
+
+        if(eventOptional.isEmpty()){
+            throw new EntityNotFoundException("Não encontramos evento com esse ID.");
+        }
+
+        if(eventOptional.get().getDate().isBefore(tickets.getDateAccessTickets())){
+            throw new IllegalArgumentException("A data para liberar ingressos deve ser antes da data do evento.");
+        }
+    }
 }
