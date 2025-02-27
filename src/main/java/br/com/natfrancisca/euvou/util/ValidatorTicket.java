@@ -28,7 +28,7 @@ public class ValidatorTicket {
             throw new EntityNotFoundException("Evento não cadastrou acesso aos ingressos.");
         }
 
-        if(!tickets.isAccessStatus()){
+        if(!tickets.getAccessStatus()){
             throw new IllegalStateException("O acesso aos ingressos foi bloqueado pelo organizador.");
         }
 
