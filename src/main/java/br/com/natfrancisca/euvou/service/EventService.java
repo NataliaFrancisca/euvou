@@ -87,6 +87,7 @@ public class EventService {
 
         eventToUpdate.setName(event.getName());
         eventToUpdate.setAddress(event.getAddress());
+        eventToUpdate.setDate(event.getDate());
         eventToUpdate.setOrganizer_id(event.getOrganizer_id());
         eventToUpdate.setOrganizer(organizerOptional.get());
 
