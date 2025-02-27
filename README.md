@@ -26,4 +26,15 @@
 - [X] Editar Eventos
 - [X] Deletar Evento
 
-      
+### Ingressos (`/tickets`)
+- [X] Criar Ingressos para Evento
+- [X] Listar Ingressos de todos os Eventos
+- [X] Buscar por Ingressos (`eventId`)
+- [X] Editar disponibilidade dos Ingressos (`eventId` & `manage-access?access=true`)
+- [X] Editar Ingressos (`eventId` & `body`)
+- [X] Deletar Ingressos do Evento
+
+### Ingressos (`/ticket`)
+- [X] Criar Ingresso
+- [X] Acessar Ingresso (`cpf`)
+
