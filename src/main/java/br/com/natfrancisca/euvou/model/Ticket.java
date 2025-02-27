@@ -1,6 +1,5 @@
 package br.com.natfrancisca.euvou.model;
 
-import br.com.natfrancisca.euvou.dto.EventShortDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +30,6 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "client_id", insertable = false, updatable = false)
     private Client client;
-
-    @ManyToOne
-    @JoinColumn(name = "tickets_id", nullable = false)
-    private Tickets tickets;
 
     public Ticket(Ticket ticket, Event event, Client client){
         this.id = ticket.getId();
