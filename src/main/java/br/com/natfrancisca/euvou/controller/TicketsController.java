@@ -2,8 +2,6 @@ package br.com.natfrancisca.euvou.controller;
 
 import br.com.natfrancisca.euvou.dto.APIResponseDTO;
 import br.com.natfrancisca.euvou.dto.TicketsDTO;
-import br.com.natfrancisca.euvou.model.Tickets;
-import br.com.natfrancisca.euvou.service.TicketService;
 import br.com.natfrancisca.euvou.service.TicketsService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -39,14 +37,14 @@ public class TicketsController {
     }
 
     @PutMapping("/{id}/manage-access")
-    public ResponseEntity<APIResponseDTO> updateAccess(@PathVariable Long id, @RequestParam @Valid boolean access){
+    public ResponseEntity<APIResponseDTO> updateAccess(@PathVariable Long id, @RequestParam  boolean access){
         this.ticketsService.updateAccess(id, access);
         return APIResponseDTO.create(HttpStatus.OK, access ? "Acesso aos ingressos liberado com sucesso." : "Acesso aos ingressos bloqueado com sucesso.");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<APIResponseDTO> update(@PathVariable Long id, @RequestParam @Valid Tickets tickets){
-        return APIResponseDTO.create(HttpStatus.OK, this.ticketsService.update(id, tickets));
+    public ResponseEntity<APIResponseDTO> update(@PathVariable Long id, @RequestBody TicketsDTO ticketsDTO){
+        return APIResponseDTO.create(HttpStatus.OK, this.ticketsService.update(id, ticketsDTO.toEntity()));
     }
 
     @DeleteMapping("/{id}")
