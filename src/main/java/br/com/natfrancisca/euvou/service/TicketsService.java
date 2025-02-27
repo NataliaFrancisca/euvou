@@ -8,7 +8,6 @@ import br.com.natfrancisca.euvou.util.ValidatorTickets;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +37,7 @@ public class TicketsService {
     public Tickets create(Tickets tickets){
         Event event = this.validatorTickets.validate(tickets);
         tickets.setEvent(event);
+        tickets.setAccessStatus(true);
         return this.ticketsRepository.save(tickets);
     }
 
@@ -52,15 +52,13 @@ public class TicketsService {
     public TicketsDTO update(Long id, Tickets tickets){
         Tickets ticketsToUpdate = this.getTicketsOrCheckTicketsExist(id);
 
-        if(!tickets.getEvent_id().equals(ticketsToUpdate.getEvent_id()) && this.ticketsRepository.existsByEventId(tickets.getEvent_id())) {
-            throw new DataIntegrityViolationException("Já existe ingressos para esse evento.");
-        }
+        this.validatorTickets.validateUpdateTickets(tickets, ticketsToUpdate);
 
         ticketsToUpdate.setAmount(tickets.getAmount());
         ticketsToUpdate.setNumberDaysCloseAccessTickets(tickets.getNumberDaysCloseAccessTickets());
         ticketsToUpdate.setEvent_id(tickets.getEvent_id());
         ticketsToUpdate.setDateAccessTickets(tickets.getDateAccessTickets());
-        ticketsToUpdate.setAccessStatus(tickets.isAccessStatus());
+        ticketsToUpdate.setAccessStatus(tickets.getAccessStatus());
 
         return TicketsDTO.fromEntity(this.ticketsRepository.save(ticketsToUpdate));
     }
@@ -69,12 +67,13 @@ public class TicketsService {
     public void updateAccess(Long id, boolean status){
         Tickets tickets = this.getTicketsOrCheckTicketsExist(id);
 
-        if(tickets.isAccessStatus() == status){
+        if(tickets.getAccessStatus() == status){
             throw new IllegalStateException("Você está tentando salvar o mesmo dado.");
         }
 
         tickets.setAccessStatus(status);
         this.ticketsRepository.save(tickets);
+        this.ticketsRepository.flush();
     }
 
     public void delete(Long id){

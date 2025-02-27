@@ -53,6 +53,7 @@ public class TicketsDTO {
         ticketsDTO.setAmount(tickets.getAmount());
         ticketsDTO.setDateAccessTickets(tickets.getDateAccessTickets());
         ticketsDTO.setNumberDaysCloseAccessTickets(tickets.getNumberDaysCloseAccessTickets());
+        ticketsDTO.setAccessStatus(tickets.getAccessStatus());
         ticketsDTO.setEvent(EventDTO.fromEntity(tickets.getEvent()));
 
         return ticketsDTO;
