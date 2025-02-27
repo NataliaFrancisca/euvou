@@ -1,7 +1,6 @@
 package br.com.natfrancisca.euvou.service;
 
 import br.com.natfrancisca.euvou.dto.EventDTO;
-import br.com.natfrancisca.euvou.exception.OrganizerException;
 import br.com.natfrancisca.euvou.model.Event;
 import br.com.natfrancisca.euvou.model.Organizer;
 import br.com.natfrancisca.euvou.repository.EventRepository;
@@ -25,13 +24,13 @@ public class EventService {
 
     public Event create(Event event){
         if(event.getOrganizer_id() == null){
-            throw new OrganizerException("O organizador do evento não pode ser nulo.");
+            throw new IllegalArgumentException("O organizador do evento não pode ser nulo.");
         }
 
         Optional<Organizer> organizerOptional = this.organizerRepository.findById(event.getOrganizer_id());
 
         if(organizerOptional.isEmpty()){
-            throw new OrganizerException("Não existe nenhum organizador com esse ID.");
+            throw new IllegalStateException("Não existe nenhum organizador com esse ID.");
         }
 
         return this.eventRepository.save(event);
@@ -48,14 +47,14 @@ public class EventService {
         Optional<Event> eventOptional = this.eventRepository.findById(id);
 
         return eventOptional.map(EventDTO::fromEntity)
-                .orElseThrow(() -> new OrganizerException("Nenhum evento encontrado com esse ID."));
+                .orElseThrow(() -> new IllegalStateException("Nenhum evento encontrado com esse ID."));
     }
 
     public List<EventDTO> getByName(String title){
         List<Event> events = this.eventRepository.findByNameContainingIgnoreCase(title);
 
         if(events.isEmpty()){
-            throw new OrganizerException("Nenhum evento com esse nome.");
+            throw new IllegalStateException("Nenhum evento com esse nome.");
         }
 
         return events.stream().map(EventDTO::fromEntity).toList();
@@ -65,7 +64,7 @@ public class EventService {
         Optional<Event> optionalEvent = this.eventRepository.findById(id);
 
         if(optionalEvent.isEmpty()){
-            throw new OrganizerException("Nenhum evento encontrado com esse ID.");
+            throw new IllegalStateException("Nenhum evento encontrado com esse ID.");
         }
 
         this.eventRepository.delete(optionalEvent.get());
@@ -75,19 +74,20 @@ public class EventService {
         Optional<Event> optionalEvent = this.eventRepository.findById(id);
 
         if(optionalEvent.isEmpty()){
-            throw new OrganizerException("Nenhum evento encontrado com esse ID.");
+            throw new IllegalStateException("Nenhum evento encontrado com esse ID.");
         }
 
         Optional<Organizer> organizerOptional = this.organizerRepository.findById(event.getOrganizer_id());
 
         if(organizerOptional.isEmpty()){
-            throw new OrganizerException("Não existe nenhum organizador com esse ID.");
+            throw new IllegalStateException("Não existe nenhum organizador com esse ID.");
         }
 
         Event eventToUpdate = optionalEvent.get();
 
         eventToUpdate.setName(event.getName());
         eventToUpdate.setAddress(event.getAddress());
+        eventToUpdate.setDate(event.getDate());
         eventToUpdate.setOrganizer_id(event.getOrganizer_id());
         eventToUpdate.setOrganizer(organizerOptional.get());
 

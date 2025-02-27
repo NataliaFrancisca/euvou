@@ -13,7 +13,7 @@ public class ValidatorCPF {
         boolean isCPFValid = isCPFValid(cpf);
 
         if(!isCPFValid){
-            throw new InvalidCPFException("Digite um CPF válido ex.: xxx.xxx.xxx-xx");
+            throw new InvalidCPFException("Digite um CPF válido, somente os números.");
         }
     }
 
