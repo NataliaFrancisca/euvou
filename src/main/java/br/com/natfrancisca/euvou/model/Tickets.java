@@ -41,9 +41,10 @@ public class Tickets {
     private Event event;
 
     @Column(nullable = false)
-    private boolean accessStatus = true;
+    private Boolean accessStatus = true;
 
     public Tickets(Tickets tickets, Event event){
+        this.id = tickets.id;
         this.amount = tickets.getAmount();
         this.dateAccessTickets = tickets.getDateAccessTickets();
         this.numberDaysCloseAccessTickets = tickets.getNumberDaysCloseAccessTickets();
