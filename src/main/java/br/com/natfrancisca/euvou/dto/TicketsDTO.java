@@ -41,6 +41,7 @@ public class TicketsDTO {
         tickets.setAmount(this.amount);
         tickets.setDateAccessTickets(this.dateAccessTickets);
         tickets.setNumberDaysCloseAccessTickets(this.numberDaysCloseAccessTickets);
+        tickets.setEvent_id(this.event_id);
 
         return tickets;
     }
