@@ -5,7 +5,9 @@ import br.com.natfrancisca.euvou.model.Ticket;
 import br.com.natfrancisca.euvou.model.Tickets;
 import br.com.natfrancisca.euvou.repository.TicketRepository;
 import br.com.natfrancisca.euvou.repository.TicketsRepository;
+import br.com.natfrancisca.euvou.util.ValidatorCPF;
 import br.com.natfrancisca.euvou.util.ValidatorTicket;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,34 +19,46 @@ public class TicketService {
     final private TicketRepository ticketRepository;
     final private TicketsRepository ticketsRepository;
     final private ValidatorTicket ticketValidator;
+    final private ValidatorCPF validatorCPF;
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository, TicketsRepository ticketsRepository, ValidatorTicket ticketValidator){
+    public TicketService(TicketRepository ticketRepository, TicketsRepository ticketsRepository, ValidatorTicket ticketValidator, ValidatorCPF validatorCPF){
         this.ticketRepository = ticketRepository;
         this.ticketsRepository = ticketsRepository;
         this.ticketValidator = ticketValidator;
+        this.validatorCPF = validatorCPF;
     }
 
-    public Ticket create(Ticket ticket){
-        Tickets tickets = ticketsRepository.getByEventId(ticket.getEvent_id());
-
-        ticketValidator.validate(ticket, tickets);
-        ticket.setTickets(tickets);
-
-        return this.ticketRepository.save(ticket);
+    private String convertStringToCPF(String cpf){
+        return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
     }
 
-    public List<TicketDTO> getAll(){
+    public TicketDTO create(Ticket ticket){
+
+        Optional<Tickets> tickets = ticketsRepository.findByEventId(ticket.getEvent_id());
+
+        if(tickets.isEmpty()){
+            throw new EntityNotFoundException("Não encontramos ingressos para esse evento.");
+        }
+
+        ticketValidator.validate(ticket, tickets.get());
+        return TicketDTO.fromEntity(this.ticketRepository.save(ticket));
+    }
+
+    public List<TicketDTO> get(){
         return this.ticketRepository.findAll().stream().map(TicketDTO::fromEntity).toList();
     }
 
-    public TicketDTO get(Long id){
-        Optional<Ticket> ticketDTOOptional = this.ticketRepository.findById(id);
+    public TicketDTO getByCPF(String cpf){
+        String cpfFormatted = convertStringToCPF(cpf);
+        this.validatorCPF.validate(cpfFormatted);
 
-        if(ticketDTOOptional.isEmpty()){
-            throw new IllegalArgumentException("Não existe nenhum ingresso com esse ID.");
+        Optional<Ticket> ticketOptional = this.ticketRepository.findByClientCpf(cpfFormatted);
+
+        if(ticketOptional.isEmpty()){
+            throw new EntityNotFoundException("Não existe ingresso com esse número de CPF.");
         }
 
-        return TicketDTO.fromEntity(ticketDTOOptional.get());
+        return TicketDTO.fromEntity(ticketOptional.get());
     }
 }
