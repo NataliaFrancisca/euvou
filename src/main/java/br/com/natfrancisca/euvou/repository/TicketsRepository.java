@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface TicketsRepository extends JpaRepository<Tickets, Long> {
     boolean existsByEventId(Long id);
-    Tickets getByEventId(Long id);
     Optional<Tickets> findByEventId(Long id);
 
     @Query("SELECT COUNT(t) FROM Ticket t WHERE t.event.id = :eventId")
