@@ -6,6 +6,7 @@ import br.com.natfrancisca.euvou.model.Tickets;
 import br.com.natfrancisca.euvou.repository.TicketsRepository;
 import br.com.natfrancisca.euvou.util.ValidatorTickets;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -44,11 +45,11 @@ public class TicketsService {
         return this.ticketsRepository.findAll().stream().map(TicketsDTO::fromEntity).toList();
     }
 
-    public Tickets getById(Long id){
-       return this.getTicketsOrCheckTicketsExist(id);
+    public TicketsDTO getById(Long id){
+       return TicketsDTO.fromEntity(this.getTicketsOrCheckTicketsExist(id));
     }
 
-    public Tickets update(Long id, Tickets tickets){
+    public TicketsDTO update(Long id, Tickets tickets){
         Tickets ticketsToUpdate = this.getTicketsOrCheckTicketsExist(id);
 
         if(!tickets.getEvent_id().equals(ticketsToUpdate.getEvent_id()) && this.ticketsRepository.existsByEventId(tickets.getEvent_id())) {
@@ -61,9 +62,10 @@ public class TicketsService {
         ticketsToUpdate.setDateAccessTickets(tickets.getDateAccessTickets());
         ticketsToUpdate.setAccessStatus(tickets.isAccessStatus());
 
-        return this.ticketsRepository.save(ticketsToUpdate);
+        return TicketsDTO.fromEntity(this.ticketsRepository.save(ticketsToUpdate));
     }
 
+    @Transactional
     public void updateAccess(Long id, boolean status){
         Tickets tickets = this.getTicketsOrCheckTicketsExist(id);
 
